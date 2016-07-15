@@ -1,0 +1,9 @@
+#!/bin/sh
+
+echo "Building Docker container"
+docker build -t miserver .
+
+echo "running Docker container as dyalogtest"
+
+docker run --name MiServer -e MYDYALOG_USERNAME=$USERNAME -e MYDYALOG_PASSWORD=$PASSWORD -p 8080:8080 -p 4502:4502 miserver
+
