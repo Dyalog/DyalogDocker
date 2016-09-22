@@ -18,6 +18,11 @@ else
     git pull
 fi
 
+## This is a workaround for APL using 100% CPU when input is redirected from /dev/null
 
-MiServer=/MiServer/SampleMiSites/MS3 dyalog -ride +s 0</dev/null 1>/tmp/apl 2>&1 /MiServer/miserver.dws
+mkfifo /tmp/aplfifo
+tail -f /dev/null > /tmp/aplfifo &
+
+export MiServer=${MiServer-/MiServer/SampleMiSites/MS3}
+dyalog -ride +s 0</tmp/aplfifo 1>/tmp/apl 2>&1 /MiServer/miserver.dws
 
