@@ -24,5 +24,5 @@ mkfifo /tmp/aplfifo
 tail -f /dev/null > /tmp/aplfifo &
 
 export MiServer=${MiServer-/MiServer/SampleMiSites/MS3}
-dyalog -ride +s 0</tmp/aplfifo 1>/tmp/apl 2>&1 /MiServer/miserver.dws
+dyalog -ride +s /MiServer/miserver.dws 0</tmp/aplfifo
 
