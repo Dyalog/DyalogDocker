@@ -1,8 +1,13 @@
 FROM ubuntu:14.04
 
 ENV DEBIAN_FRONTEND     noninteractive
-ENV APL_VERSION=15.0.27698
+ENV APL_VERSION=15.0.29007
 ENV MAXWS=256M
+
+RUN locale-gen en_US.UTF-8  
+ENV LANG en_US.UTF-8  
+ENV LANGUAGE en_US:en  
+ENV LC_ALL en_US.UTF-8  
 
 RUN apt-get update && apt-get install -y    \
         git         \
