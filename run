@@ -1,7 +1,5 @@
 #!/bin/bash
 
-echo "Building Docker container"
-docker build -t miserver . | tee docker-build.log
 
 if [ -z "$MYDYALOG_USERNAME" ]; then
 	echo -n "Please enter your MyDyalog Username: "
@@ -14,7 +12,10 @@ if [ -z "$MYDYALOG_PASSWORD" ]; then
 	export MYDYALOG_USERNAME
 fi
 
+echo "Building Docker container"
+docker build -t miserver --build-arg MYDYALOG_USERNAME=${MYDYALOG_USERNAME} --build-arg MYDYALOG_PASSWORD=${MYDYALOG_PASSWORD} . | tee docker-build.log
+
 echo "running Docker container as dyalogtest"
 
-docker run -it --rm -e MYDYALOG_USERNAME=$MYDYALOG_USERNAME -e MYDYALOG_PASSWORD=$MYDYALOG_PASSWORD -p 8080:8080 -p 4502:4502 miserver
+docker run -it --rm -p 8082:8080 -p 4502:4502 miserver
 
