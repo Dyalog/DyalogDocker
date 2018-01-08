@@ -1,7 +1,7 @@
 FROM ubuntu:16.04
 
 ENV DEBIAN_FRONTEND     noninteractive
-ENV APL_VERSION=15.0.30781
+ENV APL_VERSION=16.0.31812
 ENV MAXWS=256M
 
 RUN apt-get update && apt-get install -y    \

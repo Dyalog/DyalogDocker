@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if ! dpkg -s dyalog-unicode-150 | grep "install ok installed"; then
+if ! dpkg -s dyalog-unicode-160 | grep "install ok installed"; then
     DYALOG_URL=https://my.dyalog.com/files/installs/linux_64_${APL_VERSION}_unicode.zip
 
     cd /tmp
@@ -18,11 +18,6 @@ else
     git pull
 fi
 
-## This is a workaround for APL using 100% CPU when input is redirected from /dev/null
-
-mkfifo /tmp/aplfifo
-tail -f /dev/null > /tmp/aplfifo &
-
-export MiServer=${MiServer-/MiServer/SampleMiSites/MS3}
-dyalog -s /MiServer/miserver.dws 0</tmp/aplfifo
+export MiServer=${MiServer-/MiServer/MS3}
+dyalog -s /MiServer/miserver.dws
 
