@@ -3,7 +3,7 @@ FROM ubuntu:16.04
 ARG MYDYALOG_USERNAME
 ARG MYDYALOG_PASSWORD
 
-ENV DEBIAN_FRONTEND     noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
 ENV APL_VERSION=16.0.31812
 ENV MAXWS=256M
 ENV DYALOG_URL=https://my.dyalog.com/files/installs/linux_64_${APL_VERSION}_unicode.zip
