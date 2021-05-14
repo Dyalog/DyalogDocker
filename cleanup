@@ -1,8 +1,0 @@
-#!/bin/bash
-
-echo "stopping Docker container"
-docker stop MiServer
-echo "Removing Docker container"
-docker rm MiServer
-echo "Removing Docker image"
-docker rmi miserver
