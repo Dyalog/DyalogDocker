@@ -3,13 +3,12 @@ FROM debian:buster-slim as installer
 ENV DYALOG_RELEASE=18.0
 ARG DYALOG_VERSION=${DYALOG_RELEASE}.39712
 ARG BUILDTYPE=minimal
+ARG DEBFILE=https://www.dyalog.com/uploads/php/download.dyalog.com/download.php?file=${DYALOG_RELEASE}/linux_64_${DYALOG_VERSION}_unicode.x86_64.deb
 
-ADD https://www.dyalog.com/uploads/php/download.dyalog.com/download.php?file=18.0/dyalog-unicode_${DYALOG_VERSION}_x86_64.tar.gz /tmp/mdyalog.tar.gz
+ADD ${DEBFILE} /tmp/dyalog.deb
 ADD rmfiles.sh /
 
-RUN mkdir -p /opt/mdyalog && tar xf /tmp/mdyalog.tar.gz -C /opt && /rmfiles.sh
-
-
+RUN dpkg -i --ignore-depends=libtinfo5 /tmp/dyalog.deb && /rmfiles.sh
 
 FROM debian:buster-slim
 
@@ -32,9 +31,7 @@ COPY --from=0 /opt /opt
 ADD entrypoint /
 
 RUN ln -s /run /usr/bin/dyalog
-
 RUN useradd -s /bin/bash -d /home/dyalog -m dyalog
-
 RUN mkdir /app /storage && \
     chmod 777 /app /storage
 
