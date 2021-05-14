@@ -1,6 +1,6 @@
 FROM debian:buster-slim as installer
 
-ENV DYALOG_RELEASE=18.0
+ARG DYALOG_RELEASE=18.0
 ARG DYALOG_VERSION=${DYALOG_RELEASE}.39712
 ARG BUILDTYPE=minimal
 ARG DEBFILE=https://www.dyalog.com/uploads/php/download.dyalog.com/download.php?file=${DYALOG_RELEASE}/linux_64_${DYALOG_VERSION}_unicode.x86_64.deb
@@ -12,7 +12,7 @@ RUN dpkg -i --ignore-depends=libtinfo5 /tmp/dyalog.deb && /rmfiles.sh
 
 FROM debian:buster-slim
 
-ENV DYALOG_RELEASE=18.0
+ARG DYALOG_RELEASE=18.0
 
 RUN apt-get update && apt-get install -y --no-install-recommends locales && \
     apt-get clean && rm -Rf /var/lib/apt/lists/*             && \
@@ -29,6 +29,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends libncurses5 && 
 COPY --from=0 /opt /opt
 
 ADD entrypoint /
+RUN sed -i "s/{{DYALOG_RELEASE}}/${DYALOG_RELEASE}/" /entrypoint
 
 RUN ln -s /run /usr/bin/dyalog
 RUN useradd -s /bin/bash -d /home/dyalog -m dyalog
