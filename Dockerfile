@@ -1,7 +1,7 @@
 FROM debian:buster-slim as installer
 
 ARG DYALOG_RELEASE=18.0
-ARG DYALOG_VERSION=${DYALOG_RELEASE}.39712
+ARG DYALOG_VERSION=${DYALOG_RELEASE}.40684
 ARG BUILDTYPE=minimal
 ARG DEBFILE=https://www.dyalog.com/uploads/php/download.dyalog.com/download.php?file=${DYALOG_RELEASE}/linux_64_${DYALOG_VERSION}_unicode.x86_64.deb
 
