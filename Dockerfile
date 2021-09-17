@@ -1,11 +1,15 @@
 FROM debian:buster-slim as installer
 
 ARG DYALOG_RELEASE=18.0
-ARG DYALOG_VERSION=${DYALOG_RELEASE}.40684
 ARG BUILDTYPE=minimal
-ARG DEBFILE=https://www.dyalog.com/uploads/php/download.dyalog.com/download.php?file=${DYALOG_RELEASE}/linux_64_${DYALOG_VERSION}_unicode.x86_64.deb
 
-ADD ${DEBFILE} /tmp/dyalog.deb
+RUN apt-get update && apt-get install -y curl && \
+    apt-get clean && rm -Rf /var/lib/apt/lists/*
+
+RUN DEBFILE=`curl -o - -s https://www.dyalog.com/uploads/php/download.dyalog.com/download.php?file=docker.metafile | grep "deb" | grep "${DYALOG_RELEASE}" | awk '{print $3}'` && \
+    echo ${DEBFILE} && \
+    curl -o /tmp/dyalog.deb ${DEBFILE}
+
 ADD rmfiles.sh /
 
 RUN dpkg -i --ignore-depends=libtinfo5 /tmp/dyalog.deb && /rmfiles.sh
