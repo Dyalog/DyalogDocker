@@ -7,7 +7,6 @@ RUN apt-get update && apt-get install -y curl && \
     apt-get clean && rm -Rf /var/lib/apt/lists/*
 
 RUN DEBFILE=`curl -o - -s https://www.dyalog.com/uploads/php/download.dyalog.com/download.php?file=docker.metafile | grep "deb" | grep "${DYALOG_RELEASE}" | awk '{print $3}'` && \
-    echo ${DEBFILE} && \
     curl -o /tmp/dyalog.deb ${DEBFILE}
 
 ADD rmfiles.sh /
