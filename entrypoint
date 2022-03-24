@@ -19,30 +19,37 @@ export APL_TEXTINAPLCORE=${APL_TEXTINAPLCORE-1}
 export TRACE_ON_ERROR=0
 export SESSION_FILE="${SESSION_FILE-$DYALOG/default.dse}"
 
-if [ $(ls /app/*.dcfg 2>/dev/null | wc -l) = 1 ]; then
-    export CONFIGFILE=$(ls /app/*.dcfg)
-    echo "found config file Launching with CONFIGFILE=$CONFIGFILE"
-elif [ $(ls /app/*.aplf 2>/dev/null | wc -l) = 1 ]; then
-    export LOAD=$(ls /app/*.aplf)
-    echo "found aplf file Launching with LOAD=$LOAD"
-elif [ $(ls /app/*.apln 2>/dev/null | wc -l) = 1 ]; then
-    export LOAD=$(ls /app/*.apln)
-    echo "found apln file Launching with LOAD=$LOAD"
-elif [ $(ls /app/*.aplc 2>/dev/null | wc -l) = 1 ]; then
-    export LOAD=$(ls /app/*.aplc)
-    echo "found aplc file Launching with LOAD=$LOAD"
-elif [ $(ls /app/*.dyapp 2>/dev/null | wc -l) = 1 ]; then
-    export DYAPP=$(ls /app/*.dyapp)
-    echo "found dyapp file Launching with DYAPP=$DYAPP"
-elif [ $(ls /app/*.dws 2>/dev/null | wc -l) = 1 ]; then
-    WS=$(ls /app/*.dws)
-    echo "found dws file Launching with $WS"
-elif [ $(ls /app/*.dyapp 2>/dev/null | wc -l) -gt 1 ]; then
-    echo "found too many dyapp files Starting Dyalog with CLEAR WS"
-elif [ $(ls /app/*.dws 2>/dev/null | wc -l) -gt 1 ]; then
-    echo "found too many dws files Starting Dyalog with CLEAR WS"
-else
-    echo "nothing to load in /app Starting with CLEAR WS"
+if    [ "x${LOAD}" = "x" ] \
+   && [ "x${CONFIGFILE}" = "x" ] \
+   && [ "x${DYAPP}" = "x" ]; then
+
+    if [ $(ls /app/*.dcfg 2>/dev/null | wc -l) = 1 ]; then
+        export CONFIGFILE=$(ls /app/*.dcfg)
+        echo "found config file Launching with CONFIGFILE=$CONFIGFILE"
+    elif [ $(ls /app/*.aplf 2>/dev/null | wc -l) = 1 ]; then
+        export LOAD=$(ls /app/*.aplf)
+        echo "found aplf file Launching with LOAD=$LOAD"
+    elif [ $(ls /app/*.apln 2>/dev/null | wc -l) = 1 ]; then
+        export LOAD=$(ls /app/*.apln)
+        echo "found apln file Launching with LOAD=$LOAD"
+    elif [ $(ls /app/*.aplc 2>/dev/null | wc -l) = 1 ]; then
+        export LOAD=$(ls /app/*.aplc)
+        echo "found aplc file Launching with LOAD=$LOAD"
+    elif [ $(ls /app/*.dyapp 2>/dev/null | wc -l) = 1 ]; then
+        export DYAPP=$(ls /app/*.dyapp)
+        echo "found dyapp file Launching with DYAPP=$DYAPP"
+    elif [ $(ls /app/*.dws 2>/dev/null | wc -l) = 1 ]; then
+        WS=$(ls /app/*.dws)
+        echo "found dws file Launching with $WS"
+    elif [ $(ls /app/*.dyapp 2>/dev/null | wc -l) -gt 1 ]; then
+        echo "found too many dyapp files Starting Dyalog with CLEAR WS"
+    elif [ $(ls /app/*.dws 2>/dev/null | wc -l) -gt 1 ]; then
+        echo "found too many dws files Starting Dyalog with CLEAR WS"
+    else
+        echo "nothing to load in /app Starting with CLEAR WS"
+    fi
+else 
+    echo "LOAD, CONFIGFILE or DYAPP was set, not loading any defaults"
 fi
 
 if [ -n "${RIDE_INIT}" ]; then
@@ -50,4 +57,3 @@ if [ -n "${RIDE_INIT}" ]; then
 else
     $DYALOG/dyalog -s ${WS} $@
 fi
-

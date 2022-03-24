@@ -1,6 +1,6 @@
 FROM debian:buster-slim as installer
 
-ARG DYALOG_RELEASE=18.0
+ARG DYALOG_RELEASE=18.2
 ARG BUILDTYPE=minimal
 
 RUN apt-get update && apt-get install -y curl && \
@@ -15,7 +15,7 @@ RUN dpkg -i --ignore-depends=libtinfo5 /tmp/dyalog.deb && /rmfiles.sh
 
 FROM debian:buster-slim
 
-ARG DYALOG_RELEASE=18.0
+ARG DYALOG_RELEASE=18.2
 
 RUN apt-get update && apt-get install -y --no-install-recommends locales && \
     apt-get clean && rm -Rf /var/lib/apt/lists/*             && \
@@ -32,6 +32,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends libncurses5 && 
 COPY --from=0 /opt /opt
 
 RUN P=$(echo ${DYALOG_RELEASE} | sed 's/\.//g') && update-alternatives --install /usr/bin/dyalog dyalog /opt/mdyalog/${DYALOG_RELEASE}/64/unicode/dyalog ${P}
+RUN P=$(echo ${DYALOG_RELEASE} | sed 's/\.//g') && update-alternatives --install /usr/bin/dyalogscript dyalogscript /opt/mdyalog/${DYALOG_RELEASE}/64/unicode/scriptbin/dyalogscript ${P}
+RUN cp /opt/mdyalog/${DYALOG_RELEASE}/64/unicode/LICENSE /LICENSE
 
 ADD entrypoint /
 RUN sed -i "s/{{DYALOG_RELEASE}}/${DYALOG_RELEASE}/" /entrypoint
@@ -47,4 +49,5 @@ EXPOSE 4502
 
 USER dyalog
 WORKDIR /home/dyalog
+VOLUME [ "/storage", "/app" ]
 ENTRYPOINT ["/entrypoint"]

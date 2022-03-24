@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ "$BUILDTYPE" = "minimal" ]; then
-  cd /opt/mdyalog/18.0/64/unicode/
+  cd /opt/mdyalog/18.2/64/unicode/
 
   rm -Rf aplfmt \
     aplkeys/file_siso \
