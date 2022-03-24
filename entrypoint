@@ -41,6 +41,8 @@ elif [ $(ls /app/*.dyapp 2>/dev/null | wc -l) -gt 1 ]; then
     echo "found too many dyapp files Starting Dyalog with CLEAR WS"
 elif [ $(ls /app/*.dws 2>/dev/null | wc -l) -gt 1 ]; then
     echo "found too many dws files Starting Dyalog with CLEAR WS"
+else
+    echo "nothing to load in /app Starting with CLEAR WS"
 fi
 
 if [ -n "${RIDE_INIT}" ]; then

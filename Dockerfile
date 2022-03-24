@@ -6,7 +6,7 @@ ARG BUILDTYPE=minimal
 RUN apt-get update && apt-get install -y curl && \
     apt-get clean && rm -Rf /var/lib/apt/lists/*
 
-RUN DEBFILE=`curl -o - -s https://www.dyalog.com/uploads/php/download.dyalog.com/download.php?file=docker.metafile | grep "deb" | grep "${DYALOG_RELEASE}" | awk '{print $3}'` && \
+RUN DEBFILE=`curl -o - -s https://www.dyalog.com/uploads/php/download.dyalog.com/download.php?file=docker.metafile | awk -v v="$DYALOG_RELEASE" '$0~v && /deb/ {print $3}'` && \
     curl -o /tmp/dyalog.deb ${DEBFILE}
 
 ADD rmfiles.sh /
@@ -31,10 +31,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends libncurses5 && 
 
 COPY --from=0 /opt /opt
 
+RUN P=$(echo ${DYALOG_RELEASE} | sed 's/\.//g') && update-alternatives --install /usr/bin/dyalog dyalog /opt/mdyalog/${DYALOG_RELEASE}/64/unicode/dyalog ${P}
+
 ADD entrypoint /
 RUN sed -i "s/{{DYALOG_RELEASE}}/${DYALOG_RELEASE}/" /entrypoint
 
-RUN ln -s /run /usr/bin/dyalog
 RUN useradd -s /bin/bash -d /home/dyalog -m dyalog
 RUN mkdir /app /storage && \
     chmod 777 /app /storage
@@ -47,5 +48,3 @@ EXPOSE 4502
 USER dyalog
 WORKDIR /home/dyalog
 ENTRYPOINT ["/entrypoint"]
-
-
