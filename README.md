@@ -7,19 +7,19 @@ This container provides access to a Dyalog APL interpreter, with support for int
 
 Dyalog's Remote IDE (RIDE) is recommended for interactive use and debugging of the container. You can either download RIDE from [GitHub](https://github.com/Dyalog/ride) and install it locally, or you can configure the interpreter to serve RIDE up as a web application and connect to it using a web browser. Either option requires opening a port and set the [RIDE_INIT]([http://help.dyalog.com/latest/Content/UserGuide/Installation%20and%20Configuration/Configuration%20Parameters/RIDE_Init.htm) environment variable:
 
-To connect from a local RIDE, use the `serve` keyword, after which you can connect RIDE and establish an interactive session. In this example, we use port 4502:
+To connect from a local RIDE, use the `serve` keyword in `RIDE_INIT`, after which you can connect RIDE and establish an interactive session. In this example, we use port 4502:
 
 `docker run -e RIDE_INIT=serve:*:4502 -p 4502:4502 dyalog/dyalog`
 
-To connect a web browser, use the `http` keyword, after which you can connect your browser, in this example to [http://localhost:8888](http://localhost:8888/).
+To use a web browser, use the `http` keyword, after which you can connect a browser, in this example to [http://localhost:8888](http://localhost:8888/).
 
 `docker run -e RIDE_INIT=http:*:8888 -p 8888:8888 dyalog/dyalog`
 
-It is also possible to start an interactive session without RIDE simply by starting the container with the `--interactive` and `--tty` switches (or `-it` for short). Note that there is no APL keyboard support in this mode:
+It is also possible to start an interactive session without RIDE simply by starting the container with the `--interactive` and `--tty` switches (or `-it` for short).
 
 `docker run -it dyalog/dyalog`
 
-If you do not set `RIDE_INIT` or enable `-it`, the container will terminate on return to immediate execution.
+If you do not set `RIDE_INIT` or enable `-it`, the container will terminate as soon as the interpreter requires session input.
 
 If you map directories into the container using the `-v` switch, your APL session will be able to load source code and data from these directories. The next sections describes how you can configure the container to run code that is mapped into it.
 
@@ -29,7 +29,7 @@ If you set one of the environment variables `LOAD`, `CONFIGFILE` or `DYAPP` in t
 
 `docker run -v /home/mkrom/myapp:/myapp -e LOAD=/myapp/boot.dws`
 
-As the application runs, any changes that it makes to the directory will immediately be visible from outside the container. You will need to add the settings for RIDE if you want to be able to interact with the application while it is running (other than by inspecting the contents of mapped directories).
+As the application runs, any changes that it makes to the `/myapp` directory will immediately be visible from outside the container. You will need to add the settings for RIDE if you want to be able to interact with the application while it is running (other than by inspecting the contents of mapped directories).
 
 ## Automatic Application Startup
 
@@ -78,7 +78,7 @@ Loaded: #.helloworld from "/app/helloworld.aplf"
 Hello World!
 ```
 
-If you follow the instructions for enabling RIDE that you can find at the start of this document , the container will not terminate after running the loaded code (unless the code itself ends the APL session), but pause and allow debugging. If changes are made to the files in the `/app` directory, they will be reflected in the mapped directory (in this case `/home/mkrom/helloworld`).
+If you follow the instructions for enabling RIDE that you can find at the start of this document , the container will not terminate after running the loaded code (unless the code itself closes the APL session), but pause and allow debugging. If changes are made to the files in the `/app` directory, they will be reflected in the mapped directory (in this case `/home/mkrom/helloworld`).
 
 ## Extending the dyalog/dyalog Container
 
@@ -88,7 +88,7 @@ Review the [entrypoint](https://github.com/Dyalog/DyalogDocker/blob/master/entry
 
 
 ## Licence
-Dyalog is free for non-commercial use but is not free software. Please see [here](https://www.dyalog.com/prices-and-licences.htm) for our Licence Agreement and full Terms and Conditions. Note that:
+Dyalog is free for non-commercial use and for limited commercial use, but is not free software. You may create public docker images which include Dyalog APL in addition to your own work, if you observe the following conditions:
 
- * Commercial re-distribution of software that includes Dyalog requires a [Run Time Licence](https://www.dyalog.com/prices-and-licences.htm#runtimelic). If you do not have a commercial licence, and you make images available for download, this constitutes acceptance of the default Run Time Licences, which allows non-commercial and limited commercial distribution.
- * If you create docker images which include Dyalog APL in addition to your own work and make them available for download, you must include the LICENSE file in a prominent location and include instructions which make reference to it.
+- You must include Dyalog's LICENSE file in a prominent location and include instructions which require it's inclusion in any derived works.
+- If you do not have a commercial licence with a corresponding [Run Time Licence](https://www.dyalog.com/prices-and-licences.htm#runtimelic), and you make images available for download, the default Run Time Licence will automatically apply. This allows non-commercial use, and limited commercial distribution up to the revenue limit set out in the [Licenses, Terms and Conditions](https://www.dyalog.com/prices-and-licences.htm).
