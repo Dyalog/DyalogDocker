@@ -82,7 +82,7 @@ If you follow the instructions for enabling RIDE that you can find at the start 
 
 ## Extending the dyalog/dyalog Container
 
-You can build your own container images based on `dyalog/dyalog` using the statement `FROM dyalog/dyalog` in a dockerfile. This will give you a container which contains the Dyalog APL interpreter as `/opt/mdyalog/18.2/64/unicode/dyalog`. 
+You can build your own container images based on `dyalog/dyalog` using the statement `FROM dyalog/dyalog` in a dockerfile. This will give you a container which contains the Dyalog APL interpreter as `/opt/mdyalog/19.0/64/unicode/dyalog`. 
 
 Review the [entrypoint](https://github.com/Dyalog/DyalogDocker/blob/master/entrypoint) script for an example of how to launch the interpreter.
 
