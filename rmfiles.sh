@@ -1,15 +1,17 @@
 #!/bin/bash
 
 if [ "$BUILDTYPE" = "minimal" ]; then
-  cd /opt/mdyalog/18.2/64/unicode/
+  cd /opt/mdyalog/19.0/64/unicode/
 
   rm -Rf aplfmt \
     aplkeys/file_siso \
     aplkeys/utf8 \
     aplkeys/xterm \
+    aplkeys/screen \
     aplkeys.sh \
     apltrans/utf8 \
     apltrans/xterm \
+    apltrans/screen \
     BuildID \
     dyalog.BuildID \
     dyalog.config.example \
@@ -21,6 +23,7 @@ if [ "$BUILDTYPE" = "minimal" ]; then
     libcef.so \
     lib/ademo64.so \
     lib/testcallback.so \
+    lib/htmlrenderer.so \
     make_scripts \
     mapl \
     outprods \
@@ -52,6 +55,8 @@ if [ "$BUILDTYPE" = "minimal" ]; then
     cef.pak \
     cef_100_percent.pak \
     cef_200_percent.pak \
+    chrome_100_percent.pak \
+    chrome_200_percent.pak \
     cef_extensions.pak \
     chrome-sandbox \
     devtools_resources.pak \

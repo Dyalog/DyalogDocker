@@ -1,6 +1,6 @@
-FROM debian:buster-slim as installer
+FROM debian:bookworm-slim as installer
 
-ARG DYALOG_RELEASE=18.2
+ARG DYALOG_RELEASE=19.0
 ARG BUILDTYPE=minimal
 
 RUN apt-get update && apt-get install -y curl && \
@@ -13,9 +13,9 @@ ADD rmfiles.sh /
 
 RUN dpkg -i --ignore-depends=libtinfo5 /tmp/dyalog.deb && /rmfiles.sh
 
-FROM debian:buster-slim
+FROM debian:bookworm-slim
 
-ARG DYALOG_RELEASE=18.2
+ARG DYALOG_RELEASE=19.0
 
 RUN apt-get update && apt-get install -y --no-install-recommends locales && \
     apt-get clean && rm -Rf /var/lib/apt/lists/*             && \
