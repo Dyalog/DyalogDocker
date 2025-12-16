@@ -1,4 +1,4 @@
-FROM debian:bookworm-slim as installer
+FROM debian:bookworm-slim AS installer
 
 ARG DYALOG_RELEASE=19.0
 ARG BUILDTYPE=minimal
@@ -22,9 +22,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends locales && \
     sed -i -e 's/# en_GB.UTF-8 UTF-8/en_GB.UTF-8 UTF-8/' /etc/locale.gen    && \
     locale-gen
 
-ENV LANG en_GB.UTF-8
-ENV LANGUAGE en_GB:UTF-8
-ENV LC_ALL en_GB.UTF-8
+ENV LANG=en_GB.UTF-8
+ENV LANGUAGE=en_GB:UTF-8
+ENV LC_ALL=en_GB.UTF-8
 
 RUN apt-get update && apt-get install -y --no-install-recommends libncurses5 && \
     apt-get clean && rm -Rf /var/lib/apt/lists/*
