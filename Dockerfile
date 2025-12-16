@@ -22,13 +22,13 @@ RUN dpkg -i --ignore-depends=libtinfo5 /tmp/dyalog.deb && /rmfiles.sh
 ## UNIX ODBC FILES
 RUN cd /tmp && \
     if [ "$TARGETPLATFORM" = "linux/amd64" ]; then \
-        wget https://dev.mysql.com/get/Downloads/Connector-ODBC/9.1/mysql-connector-odbc-9.1.0-linux-glibc2.28-x86-64bit.tar.gz && \
+        wget -q https://dev.mysql.com/get/Downloads/Connector-ODBC/9.1/mysql-connector-odbc-9.1.0-linux-glibc2.28-x86-64bit.tar.gz && \
         tar xf mysql-connector-odbc-9.1.0-linux-glibc2.28-x86-64bit.tar.gz && \
         install -d /usr/local/mysql/lib && \
         cp -R mysql-connector-odbc-9.1.0-linux-glibc2.28-x86-64bit/lib/* /usr/local/mysql/lib/ && \
         rm -Rf /tmp/mysql-connector-odbc-9.1.0-linux-glibc2.28-x86-64bit.tar.gz /tmp/mysql-connector-odbc-9.1.0-linux-glibc2.28-x86-64bit ; \
     elif [ "$TARGETPLATFORM" = "linux/arm64" ]; then \
-        wget https://dev.mysql.com/get/Downloads/Connector-ODBC/9.1/mysql-connector-odbc-9.1.0-linux-glibc2.28-aarch64.tar.gz && \
+        wget -q https://dev.mysql.com/get/Downloads/Connector-ODBC/9.1/mysql-connector-odbc-9.1.0-linux-glibc2.28-aarch64.tar.gz && \
         tar xf mysql-connector-odbc-9.1.0-linux-glibc2.28-aarch64.tar.gz && \
         install -d /usr/local/mysql/lib && \
         cp -R mysql-connector-odbc-9.1.0-linux-glibc2.28-aarch64/lib/* /usr/local/mysql/lib/ && \
@@ -37,7 +37,7 @@ RUN cd /tmp && \
 
 RUN cd /tmp && \
     if [ "$TARGETPLATFORM" = "linux/amd64" ]; then \
-        wget https://dev.mysql.com/get/Downloads/Connector-ODBC/5.3/mysql-connector-odbc-5.3.7-linux-ubuntu16.04-x86-64bit.tar.gz   && \
+        wget -q https://dev.mysql.com/get/Downloads/Connector-ODBC/5.3/mysql-connector-odbc-5.3.7-linux-ubuntu16.04-x86-64bit.tar.gz   && \
         tar xf mysql-connector-odbc-5.3.7-linux-ubuntu16.04-x86-64bit.tar.gz && \
         install -d /usr/local/mysql/lib && \
         install mysql-connector-odbc-5.3.7-linux-ubuntu16.04-x86-64bit/lib/* /usr/local/mysql/lib/ && \
@@ -46,7 +46,7 @@ RUN cd /tmp && \
 
 RUN cd /tmp && \
     if [ "$TARGETPLATFORM" = "linux/amd64" ]; then \
-        wget https://dlm.mariadb.com/3978179/Connectors/odbc/connector-odbc-3.2.4/mariadb-connector-odbc-3.2.4-debian-bookworm-amd64.tar.gz && \
+        wget -q https://dlm.mariadb.com/3978179/Connectors/odbc/connector-odbc-3.2.4/mariadb-connector-odbc-3.2.4-debian-bookworm-amd64.tar.gz && \
         tar xf mariadb-connector-odbc-3.2.4-debian-bookworm-amd64.tar.gz && \
         cd mariadb-connector-odbc-3.2.4-debian-bookworm-amd64 && \
         mkdir -p /usr/lib/mariadb/plugin && \
@@ -55,7 +55,7 @@ RUN cd /tmp && \
         install lib/mariadb/plugin/* /usr/lib/mariadb/plugin/ && \
         cd /tmp && rm -Rf mariadb-connector-odbc-3.2.4-debian-bookworm-amd64.tar.gz ;\
     elif [ "$TARGETPLATFORM" = "linux/arm64" ]; then \
-        wget https://dlm.mariadb.com/3978144/Connectors/odbc/connector-odbc-3.2.4/mariadb-connector-odbc-3.2.4-debian-bookworm-aarch64.tar.gz && \
+        wget -q https://dlm.mariadb.com/3978144/Connectors/odbc/connector-odbc-3.2.4/mariadb-connector-odbc-3.2.4-debian-bookworm-aarch64.tar.gz && \
         tar xf mariadb-connector-odbc-3.2.4-debian-bookworm-aarch64.tar.gz && \
         cd mariadb-connector-odbc-3.2.4-debian-bookworm-aarch64 && \
         mkdir -p /usr/lib/mariadb/plugin && \
@@ -110,20 +110,22 @@ RUN wget --no-check-certificate -O /tmp/dotnet-install.sh https://dotnet.microso
 
 COPY --from=installer /opt/mdyalog /opt/mdyalog
 
+## UNIXODBC
 ## MySQL
 COPY --from=installer /usr/local/mysql/lib /usr/local/mysql/lib
 
 ##MariaDB
 COPY --from=installer /usr/lib/mariadb /usr/lib/mariadb
 RUN ln -s /usr/lib/mariadb/libmariadb.so.3  /lib/libmariadb.so.3
+ADD odbc.ini /etc/
+ADD odbcinst.ini /etc/
+## ENDUNIXODBC
 
 RUN P=$(echo ${DYALOG_RELEASE} | sed 's/\.//g') && update-alternatives --install /usr/bin/dyalog dyalog /opt/mdyalog/${DYALOG_RELEASE}/64/unicode/dyalog ${P}
 RUN P=$(echo ${DYALOG_RELEASE} | sed 's/\.//g') && update-alternatives --install /usr/bin/dyalogscript dyalogscript /opt/mdyalog/${DYALOG_RELEASE}/64/unicode/scriptbin/dyalogscript ${P}
 RUN cp /opt/mdyalog/${DYALOG_RELEASE}/64/unicode/LICENSE /LICENSE
 
 ADD entrypoint /
-ADD odbc.ini /etc/
-ADD odbcinst.ini /etc/
 RUN chmod 666 /etc/odbc.ini
 
 RUN sed -i "s/{{DYALOG_RELEASE}}/${DYALOG_RELEASE}/" /entrypoint
