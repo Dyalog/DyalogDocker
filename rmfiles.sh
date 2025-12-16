@@ -1,36 +1,41 @@
 #!/bin/bash
 
+echo "DYALOG_RELEASE IS: $DYALOG_RELEASE"
+echo "BUILDTYPE IS: $BUILDTYPE"
+
 if [ "$BUILDTYPE" = "minimal" ]; then
-  cd /opt/mdyalog/19.0/64/unicode/
+  cd /opt/mdyalog/$DYALOG_RELEASE/64/unicode/
 
   rm -Rf aplfmt \
     aplkeys/file_siso \
-    aplkeys/utf8 \
     aplkeys/xterm \
-    aplkeys/screen \
     aplkeys.sh \
-    apltrans/utf8 \
     apltrans/xterm \
-    apltrans/screen \
     BuildID \
     dyalog.BuildID \
     dyalog.config.example \
     dyalog.desktop \
-    dyalog.rt \
     dyalog.svg \
+    dyalogc \
     fonts \
     help \
     libcef.so \
+    libEGL.so \
+    libGLESv2.so \
+    libvulkan.so \
+    libvk_swiftshader.so \
     lib/ademo64.so \
     lib/testcallback.so \
-    lib/htmlrenderer.so \
     make_scripts \
     mapl \
     outprods \
+    resource.pak \
     samples \
     DWASamples \
     Samples \
     TestCertificates \
+    vk_swiftshader_icd.json \
+    v8_context_snapshot.bin \
     ws/apl2in.dws \
     ws/apl2pcin.dws \
     ws/ddb.dws \
@@ -67,5 +72,6 @@ if [ "$BUILDTYPE" = "minimal" ]; then
     lib/libcef.so \
     lib/libAplWrapper.so \
     lib/libHttpInterceptor.so \
+    RIDEapp/node_modules/cross-spawn \
 
 fi
