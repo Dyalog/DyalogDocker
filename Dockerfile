@@ -135,7 +135,7 @@ RUN mkdir /app /storage && \
     chmod 777 /app /storage
 
 LABEL org.label-schema.licence="proprietary / non-commercial"   \   
-      org.label-schema.licenceURL="https://www.dyalog.com/uploads/documents/Private_Personal_Educational_Licence.pdf"
+      org.label-schema.licenceURL="https://www.dyalog.com/uploads/documents/Developer_Software_Licence.pdf"
 
 EXPOSE 4502
 
